@@ -13,6 +13,7 @@ import Cart from "../pages/Cart/Cart";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
 import StripeCheckout from "../pages/CheckoutPage/StripeCheckout";
+import Login from "../pages/AuthPages/Login";
 
 const AppRoutes = () => {
   return (
@@ -50,7 +51,7 @@ const AppRoutes = () => {
         path="/"
         element={
           <Layout>
-            <HomePage />
+            <LoginPage />
           </Layout>
         }
       />
