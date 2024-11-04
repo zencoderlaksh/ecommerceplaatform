@@ -1,6 +1,8 @@
 [build]
-  publish = "build"
-  command = "npm run build"
+  base = "frontend/users"      # Points to the directory containing the frontend code
+  publish = "dist"             # The output directory for the built files
+  command = "npm run build"    # Build command to create the `dist` directory
+
 
 [[redirects]]
   from = "/*"
