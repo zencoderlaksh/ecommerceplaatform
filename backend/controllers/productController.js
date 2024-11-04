@@ -35,10 +35,16 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Get all products=========================================================
+// Get all products with optional category filter
 exports.getProducts = async (req, res) => {
+  const { category } = req.query; // retrieve the category from query parameters
+
   try {
-    const products = await Product.find();
+    // If category is provided, filter products by category; otherwise, return all products
+    const products = category
+      ? await Product.find({ category })
+      : await Product.find();
+
     res.status(200).json(products);
   } catch (error) {
     handleError(res, error);

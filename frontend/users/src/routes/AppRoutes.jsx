@@ -1,23 +1,32 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "../layout/Layout";
-import Login from "../pages/AuthPages/Login";
-import Signup from "../pages/AuthPages/Signup";
-import Profile from "../pages/Profile/Profile"; // Import your Profile component
+import LoginPage from "../pages/AuthPages/Login";
+import SignupPage from "../pages/AuthPages/Signup";
+import ProfileInfo from "../pages/Profile/ProfileInfo";
+import Products from "../pages/ProductPage/Products";
+import HomePage from "../pages/Home/HomePage";
+import Electronics from "../pages/ProductPage/Electronics";
+import Fashion from "../pages/ProductPage/Fashion";
+import HomeDecor from "../pages/ProductPage/HomeDecor";
+import Cart from "../pages/Cart/Cart";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import CheckoutPage from "../pages/CheckoutPage/CheckoutPage";
+import StripeCheckout from "../pages/CheckoutPage/StripeCheckout";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* No Layout for Login and Signup */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      {/* Routes without Layout */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
 
-      {/* All other routes with Layout */}
+      {/* Routes with Layout */}
       <Route
-        path="/"
+        path="/user-info"
         element={
           <Layout>
-            <div>Home</div>
+            <ProfileInfo />
           </Layout>
         }
       />
@@ -25,15 +34,48 @@ const AppRoutes = () => {
         path="/products"
         element={
           <Layout>
-            <div>Product List</div>
+            <Products />
           </Layout>
         }
       />
       <Route
-        path="/products/:id"
+        path="/home"
         element={
           <Layout>
-            <div>Product Detail</div>
+            <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/products/:category"
+        element={
+          <Layout>
+            <HomeDecor />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/products/fashion"
+        element={
+          <Layout>
+            <Fashion />
+          </Layout>
+        }
+      />
+      <Route
+        path="/products/electronics"
+        element={
+          <Layout>
+            <Electronics />
           </Layout>
         }
       />
@@ -41,15 +83,15 @@ const AppRoutes = () => {
         path="/cart"
         element={
           <Layout>
-            <div>Cart</div>
+            <Cart />
           </Layout>
         }
       />
       <Route
-        path="/profile"
+        path="/about"
         element={
           <Layout>
-            <Profile /> {/* Use your Profile component here */}
+            <AboutUs />
           </Layout>
         }
       />
@@ -57,7 +99,15 @@ const AppRoutes = () => {
         path="/checkout"
         element={
           <Layout>
-            <div>Checkout</div>
+            <CheckoutPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/checkout/stripe"
+        element={
+          <Layout>
+            <StripeCheckout />
           </Layout>
         }
       />

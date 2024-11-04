@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const connectDB = require("./db/connectDB"); // MongoDB connection
+const connectDB = require("./db/connectDB");
 
 // Import Routes
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +24,7 @@ connectDB();
 // Routes Middleware
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

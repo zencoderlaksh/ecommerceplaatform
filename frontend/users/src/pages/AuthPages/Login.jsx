@@ -1,91 +1,143 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import { loginUser } from "../../redux/slices/authSlice";
-import { useFormHandler } from "../../hooks/useFormHandler";
-import { loginSchema } from "../../utils/loginValidation";
-import { useToast } from "@chakra-ui/react"; // Import Chakra UI's useToast
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/Slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import LoginBanner from "../../assets/images/Login-banner.jpg";
+import { toast } from "react-hot-toast"; // Import toast
 
-const Login = () => {
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
+
+export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize useNavigate
-  const toast = useToast(); // Initialize toast
-  const { handleSubmit, register, errors } = useFormHandler(loginSchema);
+  const navigate = useNavigate();
+  const error = useSelector((state) => state.auth.error);
+  const formRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
-    // Dispatch the login action and wait for the promise to resolve
-    const resultAction = await dispatch(loginUser(data));
-
-    // Check if the login was successful
-    if (loginUser.fulfilled.match(resultAction)) {
-      toast({
-        title: "Login Successful.",
-        description: "You have successfully logged in.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      // Navigate to the home page after a slight delay
-      setTimeout(() => {
-        navigate("/");
-      }, 1000); // Delay for 1 second to see the toast
+    const resultAction = await dispatch(login(data));
+    if (login.fulfilled.match(resultAction)) {
+      // Show success toast
+      toast.success("Login successful! Welcome back!");
+      navigate("/home");
+      reset();
     } else {
-      toast({
-        title: "Login Failed.",
-        description:
-          resultAction.payload || "An error occurred. Please try again.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      // Show error toast
+      toast.error(error || "Invalid email or password.");
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      // Show error toast when there's an error
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    // Check screen size to apply animation only on larger screens
+    const handleAnimation = () => {
+      if (window.innerWidth > 640) {
+        // Adjust the breakpoint as needed
+        gsap.from(formRef.current, {
+          opacity: 0,
+          x: -50,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      }
+    };
+
+    handleAnimation(); // Run animation on component mount
+
+    // Optionally, handle window resize to re-check (if needed)
+    window.addEventListener("resize", handleAnimation);
+    return () => window.removeEventListener("resize", handleAnimation);
+  }, []);
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-800">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-semibold text-center text-gray-700">
-          Login
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+    <div className="flex min-h-screen bg-gray-900">
+      <div className="hidden lg:flex flex-1">
+        <img
+          src={LoginBanner}
+          alt="Login Illustration"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="flex-1 flex items-center justify-center p-6 bg-[#F8E3F6]">
+        <motion.form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-[#D268CC] rounded-lg shadow-lg p-6 w-full max-w-sm mx-auto"
+        >
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-6 text-center">
+            Login
+          </h2>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="text-white">Email</label>
             <input
-              type="email"
               {...register("email")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.email && (
               <p className="text-red-500">{errors.email.message}</p>
             )}
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+          <div className="mb-4 relative">
+            <label className="text-white">Password</label>
             <input
-              type="password"
               {...register("password")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              }`}
+              type={showPassword ? "text" : "password"}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-8 cursor-pointer text-white"
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </span>
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
           </div>
-
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200"
+            className="w-full p-2 bg-[#42626D] text-white rounded hover:bg-[#354e57] transition"
           >
             Login
           </button>
-        </form>
+          <div className="mt-4 text-center">
+            <p className="text-gray-700">
+              New here?{" "}
+              <span
+                onClick={() => navigate("/signup")}
+                className="text-black cursor-pointer hover:underline"
+              >
+                Sign up
+              </span>
+            </p>
+          </div>
+        </motion.form>
       </div>
     </div>
   );
-};
-
-export default Login;
+}

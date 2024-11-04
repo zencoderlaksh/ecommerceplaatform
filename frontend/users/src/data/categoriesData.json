@@ -1,0 +1,95 @@
+[
+  {
+    "name": "Electronics",
+    "image": "/path/to/electronics.jpg",
+    "products": [
+      {
+        "id": 1,
+        "name": "Smartphone",
+        "image": "https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309643.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 2,
+        "name": "Laptop",
+        "image": "https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309648.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 3,
+        "name": "Camera",
+        "image": "https://img.freepik.com/free-photo/still-life-teenager-s-desk_23-2149371274.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 4,
+        "name": "Headphones",
+        "image": "https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309652.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 5,
+        "name": "Smartwatch",
+        "image": "https://img.freepik.com/free-vector/work-elements-collection_1297-135.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      }
+    ]
+  },
+  {
+    "name": "Fashion",
+    "image": "/path/to/fashion.jpg",
+    "products": [
+      {
+        "id": 1,
+        "name": "Dress",
+        "image": "https://img.freepik.com/free-photo/magnificent-woman-long-bright-skirt-dancing-studio-carefree-inspired-female-model-posing-with-pleasure-yellow_197531-11084.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 2,
+        "name": "Suit",
+        "image": "https://img.freepik.com/free-photo/full-shot-cool-people-wearing-chain-necklace_23-2149409723.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 3,
+        "name": "Shoes",
+        "image": "https://img.freepik.com/free-photo/woman-black-trousers-purple-blouse-laughs-leaning-stand-with-elegant-clothes-pink-background_197531-17614.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 4,
+        "name": "Handbag",
+        "image": "https://img.freepik.com/free-photo/smiling-girl-after-shopping_23-2147688872.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 5,
+        "name": "Watch",
+        "image": "https://img.freepik.com/free-photo/portrait-smiling-beautiful-girl-her-handsome-boyfriend-laughing_158538-4885.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      }
+    ]
+  },
+  {
+    "name": "Home Decor",
+    "image": "/path/to/home-decor.jpg",
+    "products": [
+      {
+        "id": 1,
+        "name": "Lamp",
+        "image": "https://img.freepik.com/free-photo/mid-century-modern-living-room-interior-design-with-monstera-tree_53876-129804.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 2,
+        "name": "Vase",
+        "image": "https://img.freepik.com/free-photo/interior-living-room-design-scandinavian-style-warm-tone_53876-143148.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 3,
+        "name": "Painting",
+        "image": "https://img.freepik.com/free-photo/armchair-green-living-room-with-copy-space_43614-910.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 4,
+        "name": "Cushion",
+        "image": "https://img.freepik.com/free-photo/armchair-living-room-with-copy-space_43614-908.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      },
+      {
+        "id": 5,
+        "name": "Table",
+        "image": "https://img.freepik.com/free-photo/modern-living-room-interior-design_53876-145504.jpg?uid=R100434855&ga=GA1.1.252512179.1682322250&semt=ais_hybrid"
+      }
+    ]
+  }
+]

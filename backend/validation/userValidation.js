@@ -7,7 +7,6 @@ const signupValidation = (data) => {
     phone: Joi.string().min(10).max(15).required(),
     gender: Joi.string().valid("Male", "Female", "Other").required(),
     password: Joi.string().min(6).required(),
-    confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     city: Joi.string().required(),
     // state: Joi.string().required(),
     address: Joi.string().required(),

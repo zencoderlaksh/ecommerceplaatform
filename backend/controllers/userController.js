@@ -113,24 +113,32 @@ exports.getUserProfile = async (req, res) => {
 
 // Update user role (admin only)
 exports.updateUserRole = async (req, res) => {
+  console.log("Request to update user role received.");
+
   const { id } = req.params;
   const { role } = req.body;
 
+  console.log(`Attempting to update role for user ID: ${id} to ${role}`);
+
+  // Validate role
   if (!role || (role !== "user" && role !== "admin")) {
+    console.log("Invalid role provided.");
     return res.status(400).json({ message: "Invalid role" });
   }
 
   try {
     const user = await User.findById(id);
     if (!user) {
+      console.log("User not found.");
       return res.status(404).json({ message: "User not found" });
     }
 
     user.role = role;
     await user.save();
-
+    console.log(`User role updated to ${role}`);
     res.status(200).json({ message: `User role updated to ${role}` });
   } catch (error) {
+    console.error("Error updating user role:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

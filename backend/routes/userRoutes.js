@@ -17,6 +17,6 @@ router.post("/login", login);
 // Get user profile (protected)
 router.get("/profile", protect, getUserProfile);
 
-router.patch("/users/:id/role", protect, updateUserRole);
+router.patch("/:id/role", protect, updateUserRole);
 
 module.exports = router;

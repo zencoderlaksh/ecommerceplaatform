@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "swiper/swiper-bundle.min.css";
+
+.home-page {
+  @apply mx-auto px-4 py-8 max-w-7xl;
+}
+
+.category-section h2 {
+  @apply text-gray-800 font-bold mb-4;
+}
+
+.explore-more-button {
+  @apply w-full text-center py-2 mt-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600;
+}
+
+.deal-card {
+  @apply w-64 p-4 bg-white shadow-lg rounded-lg transform transition-transform;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-in-out;
+}
+
+/* Add this CSS to your styles file */
+
+::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #d268cc; /* Background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Optional: rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e5a0d8; /* Color of the thumb on hover */
+}
+.explore-more-button {
+  width: 90% !important;
+  background: #e5a0d8 !important;
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}

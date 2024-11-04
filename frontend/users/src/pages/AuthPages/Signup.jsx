@@ -1,110 +1,133 @@
-import React from "react";
-import { useFormHandler } from "../../hooks/useFormHandler";
-import { signupSchema } from "../../utils/signupValidation";
+// src/pages/Signup.jsx
+import React, { useRef, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser, fetchUserProfile } from "../../redux/slices/authSlice"; // Updated import
-import { useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { signup } from "../../redux/Slices/authSlice";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import SignupBanner from "../../assets/images/Login-banner.jpg"; // Adjust the path to your image
+import toast from "react-hot-toast"; // Import toast
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesome
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import eye icons
 
-const Signup = () => {
+const signupSchema = z.object({
+  name: z.string().min(3, "Name is too short"),
+  email: z.string().email("Invalid email"),
+  phone: z.string().min(10, "Invalid phone number"),
+  gender: z.enum(["Male", "Female", "Other"]),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  city: z.string().min(2, "City is required"),
+  address: z.string().min(5, "Address is required"),
+});
+
+export default function Signup() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(signupSchema),
+  });
   const dispatch = useDispatch();
-  const { handleSubmit, register, errors } = useFormHandler(signupSchema);
-  const { loading, error } = useSelector((state) => state.auth);
-  const toast = useToast();
-  const navigate = useNavigate();
+  const error = useSelector((state) => state.auth.error);
+  const formRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate
+
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const onSubmit = async (data) => {
-    const resultAction = await dispatch(signupUser(data));
-
-    if (signupUser.fulfilled.match(resultAction)) {
-      toast({
-        title: "Sign Up Successful",
-        description: "You have successfully signed up!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-
-      // Fetch user profile after successful signup
-      const { token } = resultAction.payload; // Extract token from the signup result
-      await dispatch(fetchUserProfile(token)); // Dispatch action to fetch user profile
-
-      setTimeout(() => {
-        navigate("/"); // Redirect after the toast message is displayed
-      }, 3000);
+    const resultAction = await dispatch(signup(data));
+    if (signup.fulfilled.match(resultAction)) {
+      toast.success("Signup successful!"); // Show success toast
+      reset(); // Reset form on success
+      navigate("/"); // Navigate to home page
     } else {
-      // Handle error case
-      toast({
-        title: "Sign Up Error",
-        description:
-          resultAction.error.message || "An error occurred during signup.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.error("Signup failed! Please try again."); // Show error toast
     }
   };
 
+  useEffect(() => {
+    // Check screen size to apply animation only on larger screens
+    const handleAnimation = () => {
+      if (window.innerWidth > 640) {
+        // Adjust the breakpoint as needed
+        gsap.from(formRef.current, {
+          opacity: 0,
+          x: -50,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      }
+    };
+
+    handleAnimation(); // Run animation on component mount
+
+    // Optionally, handle window resize to re-check (if needed)
+    window.addEventListener("resize", handleAnimation);
+    return () => window.removeEventListener("resize", handleAnimation);
+  }, []);
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-800">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-semibold text-center text-gray-700">
-          Sign Up
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-          {/* Name */}
+    <div className="flex min-h-screen bg-gray-900">
+      <div className="flex-1 hidden lg:block">
+        <img
+          src={SignupBanner}
+          alt="Signup Illustration"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="flex-1 flex items-center justify-center p-8 bg-[#F8E3F6] overflow-y-auto">
+        <motion.form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-[#D268CC] rounded-lg shadow-lg p-8 w-full max-w-md h-[90vh] overflow-auto"
+        >
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">
+            Sign Up
+          </h2>
           <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
+            <label className="text-white">Name</label>
             <input
-              type="text"
               {...register("name")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.name ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.name && (
               <p className="text-red-500">{errors.name.message}</p>
             )}
           </div>
-
-          {/* Email */}
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="text-white">Email</label>
             <input
-              type="email"
               {...register("email")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.email && (
               <p className="text-red-500">{errors.email.message}</p>
             )}
           </div>
-
-          {/* Phone */}
           <div className="mb-4">
-            <label className="block text-gray-700">Phone</label>
+            <label className="text-white">Phone</label>
             <input
-              type="text"
               {...register("phone")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.phone && (
               <p className="text-red-500">{errors.phone.message}</p>
             )}
           </div>
-
-          {/* Gender */}
           <div className="mb-4">
-            <label className="block text-gray-700">Gender</label>
+            <label className="text-white">Gender</label>
             <select
               {...register("gender")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.gender ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -115,81 +138,54 @@ const Signup = () => {
               <p className="text-red-500">{errors.gender.message}</p>
             )}
           </div>
-
-          {/* Password */}
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+          <div className="mb-4 relative">
+            <label className="text-white">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md pr-10" // Add padding to the right
             />
+            <span
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer" // Style for the icon
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon
+                icon={showPassword ? faEye : faEyeSlash}
+                className="text-gray-600"
+              />
+            </span>
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
           </div>
-
-          {/* Confirm Password */}
           <div className="mb-4">
-            <label className="block text-gray-700">Confirm Password</label>
+            <label className="text-white">City</label>
             <input
-              type="password"
-              {...register("confirmPassword")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.confirmPassword ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-
-          {/* City */}
-          <div className="mb-4">
-            <label className="block text-gray-700">City</label>
-            <input
-              type="text"
               {...register("city")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.city ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.city && (
               <p className="text-red-500">{errors.city.message}</p>
             )}
           </div>
-
-          {/* Address */}
           <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
+            <label className="text-white">Address</label>
             <input
-              type="text"
               {...register("address")}
-              className={`w-full p-2 border rounded mt-1 ${
-                errors.address ? "border-red-500" : "border-gray-300"
-              }`}
+              className="w-full p-2 border-gray-600 bg-[#F8E3F6] text-black rounded-md"
             />
             {errors.address && (
               <p className="text-red-500">{errors.address.message}</p>
             )}
           </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition duration-200"
-            disabled={loading}
+            className="w-full p-2 bg-[#42626D] text-white rounded hover:bg-[#354e57] transition"
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            Sign Up
           </button>
-
-          {error && <p className="text-red-500 mt-4">{error}</p>}
-        </form>
+        </motion.form>
       </div>
     </div>
   );
-};
-
-export default Signup;
+}
